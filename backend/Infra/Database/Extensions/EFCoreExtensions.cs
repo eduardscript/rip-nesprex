@@ -17,6 +17,18 @@ internal static class EfCoreExtensions
                 new(Size.Mug, 230) { Id = Size.Mug.ToIncrementedInt() },
                 new(Size.Carafe, 500) { Id = Size.Carafe.ToIncrementedInt() },
             });
+
+        modelBuilder.Entity<Category>()
+            .HasData(new List<Category>
+            {
+                new("Ristretto") { Id = 1 },
+                new("Reviving Origins") { Id = 2 },
+                new("Espresso&Double Espresso") { Id = 3 },
+                new("Gran Lungo&Mug") { Id =  4},
+                new("Craft Brew") { Id = 5 },
+                new("Coffee+") { Id = 6 },
+                new("Barista Creations") { Id = 7 },
+            });
     }
 }
 

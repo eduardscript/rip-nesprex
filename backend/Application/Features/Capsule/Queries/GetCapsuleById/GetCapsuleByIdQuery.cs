@@ -28,7 +28,8 @@ public class GetCapsuleByIdQueryHandler : IRequestHandler<GetCapsuleByIdQuery, C
             capsule.Name,
             capsule.Description,
             capsule.Category.Name,
-            capsule.Specification.Size.ToString());
+            capsule.Specification.Size.ToString(),
+            capsule.Country);
     }
 }
 
@@ -37,4 +38,5 @@ public record CapsuleDto(
     string Name,
     string? Description,
     string CategoryName,
-    string Size);
+    string Size,
+    string Country);
