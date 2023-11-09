@@ -1,4 +1,4 @@
-name: 🛠️ .NET Build and Test
+name: 🛰️ Backend
 
 on:
   push:
