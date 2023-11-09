@@ -39,11 +39,11 @@ public class AppDbContext : DbContext
         base.OnModelCreating(modelBuilder);
     }
 
-    public DbSet<Category> Categories { get; set; }
+    public DbSet<Category> Categories => Set<Category>();
 
-    public DbSet<Capsule> Capsules { get; set; }
+    public DbSet<Capsule> Capsules => Set<Capsule>();
 
-    public DbSet<Specification> Specifications { get; set; }
+    public DbSet<Specification> Specifications => Set<Specification>();
 
-    public DbSet<AuditLog> AuditLogs { get; set; }
+    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
 }
