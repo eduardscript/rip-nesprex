@@ -14,10 +14,11 @@ public class ExceptionHandlerMiddleware : IMiddleware
         }
         catch (Exception ex)
         {
-            var exceptionHandlerType = GetExceptionHandlerType(ex.GetType());
-            
-            dynamic handler = Activator.CreateInstance(exceptionHandlerType)!;
-            handler.HandleException(context, (dynamic)ex);
+            var handlerType = GetExceptionHandlerType(ex.GetType());
+            var handlerInstance = Activator.CreateInstance(handlerType)!;
+            var handlerExceptionMethod = handlerType.GetMethod("HandleException");
+
+            await (Task)handlerExceptionMethod!.Invoke(handlerInstance, new object[] { context, ex })!;
         }
     }
     
