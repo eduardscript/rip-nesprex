@@ -1,8 +1,7 @@
 ﻿namespace RestApi.Exceptions.Common;
 
-public interface IExceptionHandler
+public interface IExceptionHandler<TException>
+    where TException : Exception
 {
-    public Type ExceptionType { get; }
-
-    Task HandleException(HttpContext context, Exception exception);
+    Task HandleException(HttpContext context, TException exception);
 }

@@ -6,10 +6,8 @@ using RestApi.Exceptions.Common;
 
 namespace RestApi.Exceptions;
 
-public class InternalServerErrorExceptionHandler : IExceptionHandler
+public class InternalServerErrorExceptionHandler : IExceptionHandler<Exception>
 {
-    public Type ExceptionType { get; } = typeof(Exception);
-
     public async Task HandleException(HttpContext context, Exception exception)
     {
         var problemDetails = new ProblemDetails

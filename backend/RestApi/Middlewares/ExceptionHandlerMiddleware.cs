@@ -1,16 +1,11 @@
-﻿using RestApi.Exceptions;
+﻿using System.Reflection;
+using RestApi.Exceptions;
 using RestApi.Exceptions.Common;
 
 namespace RestApi.Middlewares;
 
 public class ExceptionHandlerMiddleware : IMiddleware
 {
-    private readonly List<IExceptionHandler> _exceptionHandlers = new()
-    {
-        new NotFoundExceptionHandler(),
-        new InternalServerErrorExceptionHandler(),
-    };
-
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try
@@ -19,8 +14,32 @@ public class ExceptionHandlerMiddleware : IMiddleware
         }
         catch (Exception ex)
         {
-            var handler = _exceptionHandlers.Single(handler => ex.GetType() == handler.ExceptionType);
-            await handler.HandleException(context, ex);
+            var exceptionHandlerType = GetExceptionHandlerType(ex.GetType());
+            
+            dynamic handler = Activator.CreateInstance(exceptionHandlerType)!;
+            handler.HandleException(context, (dynamic)ex);
+        }
+    }
+    
+    private static Type GetExceptionHandlerType(Type exceptionType)
+    {
+        return Assembly.GetAssembly(typeof(ExceptionHandlerMiddleware))!
+            .GetTypes()
+            .First(IsExceptionHandlerType(exceptionType));
+        
+        static Func<Type, bool> IsExceptionHandlerType(Type exceptionType)
+        {
+            return type =>
+                type.IsClass &&
+                type.GetInterfaces().Any(IsGenericExceptionHandlerForType(exceptionType));
+        }
+
+        static Func<Type, bool> IsGenericExceptionHandlerForType(Type exceptionType)
+        {
+            return interfaceType =>
+                interfaceType.IsGenericType &&
+                interfaceType.GetGenericTypeDefinition() == typeof(IExceptionHandler<>) &&
+                interfaceType.GetGenericArguments()[0] == exceptionType;
         }
     }
 }

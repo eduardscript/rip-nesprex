@@ -7,11 +7,9 @@ using RestApi.Exceptions.Common;
 
 namespace RestApi.Exceptions;
 
-public class NotFoundExceptionHandler : IExceptionHandler
+public class NotFoundExceptionHandler : IExceptionHandler<NotFoundException>
 {
-    public Type ExceptionType => typeof(NotFoundException);
-
-    public async Task HandleException(HttpContext context, Exception exception)
+    public async Task HandleException(HttpContext context, NotFoundException exception)
     {
         var problemDetails = new ProblemDetails
         {
