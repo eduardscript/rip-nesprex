@@ -45,7 +45,7 @@ public class CategoryRepository : ICategoryRepository
             .Include(x => x.Capsules)
             .FirstOrDefaultAsync(x => x.Id == categoryId);
 
-        if (!existingCategory!.Capsules.Any())
+        if (existingCategory is not null && existingCategory.Capsules.Any())
         {
             existingCategory.Capsules = null!;
         }
